@@ -1,39 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
+
 <head>
-<meta charset="utf-8">
-  <title>一键批量纠正直播源电视台名称</title>
-   <link rel="icon" href="https://v.cctv.com/favicon.ico" type="image/x-icon">
-<style>
-  button {
-    padding: 20px 50px; /* 设置按钮的内边距 */
-    font-size: 20px; /* 设置按钮文本的大小 */
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直播源工具</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/wwb521/live/main/ys.ico" type="image/x-icon">
+    <style>
+        /* 全局样式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            display: flex;
+        }
+
+        .menu {
+            width: 220px;
+            /* 左侧菜单栏宽度 */
+            padding: 20px;
+            background-color: #f0f0f0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .menu.dark-mode {
+            color: #fff;
+        }
+
+        .menu-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .menu-header img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .menu-header h1 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .dropdown {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            transition: background-color 0.3s ease;
+            appearance: none;
+            outline: none;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown select:hover {
+            background-color: #e0e0e0;
+        }
+
+        .dropdown-content {
+            margin-top: 10px;
+            display: none;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+            max-height: 300px;
+            /* 最大高度或根据内容调整 */
+        }
+
+        .dropdown-content button {
+            width: 100%;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content button:hover {
+            background-color: #f9f9f9;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 260px;
+            /* 左侧菜单栏宽度 + padding */
+            padding: 20px;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            overflow-y: auto;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?edd06af452c660e94372862ec494b822";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 
 <body>
-<h1>一键纠正直播源电视台名称 v1.20(免费开源)</h1><img border=0 src="http://kantv.255520.xyz/cctv.png" height="150px"><p style="font-size: 14px;">如：CCTV1纠正为CCTV-1综合。本工具为纯Html网页，无任何信息收集操作，请完全放心。因Chrome浏览权限可能导致无法复制粘贴，您可以下载使用【<a href="http://kantv.255520.xyz/TVrepair.zip" target="_blank">离线版1.2</a>】。点击查看：<a onclick="showMessage()" style="color: red; cursor: pointer;">纠正名单</a>，本工具更新日期：2024-2-29</p>
-  <textarea id="inputText" rows="20" cols="200"></textarea><br><br>若无法复制粘贴，请使用Ctrl+C、Ctrl+V快捷键。<br>
- <button onclick="pasteText()">粘贴</button>
-<button onclick="clearText()">清空</button>
-  <button onclick="formatText()">一键格式化</button>
-<button onclick="copyToClipboard()">复制到剪切板</button>
-<span id="copySuccessText"></span>
-<button onclick="generateTxt()">下载生成TXT文本</button><br><br>
-  <textarea id="outputText" rows="20" cols="200"></textarea>
+    <div class="menu" id="menu">
+        <div class="menu-header">
+            <img src="https://raw.githubusercontent.com/wwb521/live/main/ys.ico" alt="Logo">
+            <h1>直播源修改工具 v1.0</h1>
+        </div>
+        <div class="dropdown">
+            <!-- 使用下拉框 -->
+            <select onchange="handleDropdownChange(this)">
+                <option value="">功能选择</option>
+                <option value="correct">纠正直播源名称</option>
+                <option value="view">查看纠正列表</option>
+            </select>
+            <div class="dropdown-content" id="dropdown-correct">
+                <!-- 纠正直播源的选项 -->
+                <button onclick="pasteText()">粘贴</button>
+                <button onclick="clearText()">清空</button>
+                <button onclick="formatText()">一键格式化</button>
+                <button onclick="copyToClipboard()">复制到剪切板</button>
+                <button onclick="generateTxt()">下载生成TXT文本</button>
+            </div>
+            <div class="dropdown-content" id="dropdown-view">
+                <!-- 纠正列表的选项 -->
+                <button onclick=" showMessage()">查看列表</button>
+            </div>
+        </div>
+    </div>
 
-  <script>
-    function formatText() {
+    <div class="content">
+        <p>如：CCTV1纠正为CCTV-1综合。本工具为纯Html网页，无任何信息收集操作，请放心使用。</p>
+        <textarea id="inputText" placeholder="在此输入需要纠正的直播源名称"></textarea>
+        <br>
+        <span id="copySuccessText"></span>
+        <textarea id="outputText" placeholder="纠正后的直播源名称将在此显示"></textarea>
+    </div>
+
+    <script>
+        function handleDropdownChange(select) {
+            var dropdowns = document.querySelectorAll('.dropdown-content');
+            dropdowns.forEach(function (dropdown) {
+                dropdown.style.display = 'none';
+            });
+
+            var selectedOption = select.value;
+            if (selectedOption) {
+                var dropdownId = 'dropdown-' + selectedOption;
+                var dropdown = document.getElementById(dropdownId);
+                if (dropdown) {
+                    dropdown.style.display = 'block';
+                }
+            }
+        }
+
+        function formatText() {
+            var input = document.getElementById("inputText").value;
+            var lines = input.split("\n");
+            var formattedLines = lines.map(function (line) {
+                return line.replace(/CCTV1/g, "CCTV-1");
+            });
+            var output = formattedLines.join("\n");
+            document.getElementById("outputText").value = output;
+        }
+
+        function pasteText() {
+            navigator.clipboard.readText().then(function (text) {
+                document.getElementById("inputText").value = text;
+            }).catch(function (error) {
+                console.error('Failed to read clipboard contents: ', error);
+            });
+        }
+
+        function clearText() {
+            document.getElementById("inputText").value = "";
+            document.getElementById("outputText").value = "";
+        }
+
+        function copyToClipboard() {
+            var output = document.getElementById("outputText").value;
+            navigator.clipboard.writeText(output).then(function () {
+                var copySuccessText = document.getElementById("copySuccessText");
+                copySuccessText.textContent = "已成功复制到剪切板！";
+                setTimeout(function () {
+                    copySuccessText.textContent = "";
+                }, 2000);
+            }).catch(function (error) {
+                console.error('Failed to write to clipboard: ', error);
+            });
+        }
+
+        function generateTxt() {
+            var text = document.getElementById("outputText").value;
+            var element = document.createElement("a");
+            element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+            element.setAttribute("download", "纠正后的直播源名称.txt");
+            element.style.display = "none";
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        function formatText() {
       var input = document.getElementById("inputText").value;
       var lines = input.split("\n");
       var formattedLines = [];
@@ -95,43 +305,10 @@ var _hmt = _hmt || [];
       var output = formattedLines.join("\n");
       document.getElementById("outputText").value = output;
     }
-function pasteText() {
-  navigator.clipboard.readText().then(function(text) {
-    document.getElementById("inputText").value = text;
-  });
-}
-function clearText() {
-  document.getElementById("inputText").value = "";
-  document.getElementById("outputText").value = "";
-}
-function copyToClipboard() {
-  var output = document.getElementById("outputText").value;
-  navigator.clipboard.writeText(output).then(function() {
-    var copySuccessText = document.getElementById("copySuccessText");
-    copySuccessText.textContent = "  成功！已成功复制到剪贴板 ~";
-    setTimeout(function() {
-      copySuccessText.textContent = "";
-    }, 2000);
-  });
-}
-
-function generateTxt() {
-  var text = document.getElementById("outputText").value;
-  var element = document.createElement("a");
-  element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
-  element.setAttribute("download", "一键批量纠正名单.txt");
-
-  element.style.display = "none";
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
-
-function showMessage() {
+        function showMessage() {
             alert('名单： \n 1.CCTV 1-17全台 \n 2.东方卫视纠正为：上海卫视 \n 3.东南卫视纠正为：福建卫视 ');
         }
-  </script>
+    </script>
 </body>
+
 </html>
