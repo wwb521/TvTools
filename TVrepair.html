@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+  <title>一键批量纠正直播源电视台名称</title>
+   <link rel="icon" href="https://v.cctv.com/favicon.ico" type="image/x-icon">
+<style>
+  button {
+    padding: 20px 50px; /* 设置按钮的内边距 */
+    font-size: 20px; /* 设置按钮文本的大小 */
+  }
+</style>
+</head>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?edd06af452c660e94372862ec494b822";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<body>
+<h1>一键纠正直播源电视台名称 v1.20(免费开源)</h1><img border=0 src="http://kantv.255520.xyz/cctv.png" height="150px"><p style="font-size: 14px;">如：CCTV1纠正为CCTV-1综合。本工具为纯Html网页，无任何信息收集操作，请完全放心。因Chrome浏览权限可能导致无法复制粘贴，您可以下载使用【<a href="http://kantv.255520.xyz/TVrepair.zip" target="_blank">离线版1.2</a>】。点击查看：<a onclick="showMessage()" style="color: red; cursor: pointer;">纠正名单</a>，本工具更新日期：2024-2-29</p>
+  <textarea id="inputText" rows="20" cols="200"></textarea><br><br>若无法复制粘贴，请使用Ctrl+C、Ctrl+V快捷键。<br>
+ <button onclick="pasteText()">粘贴</button>
+<button onclick="clearText()">清空</button>
+  <button onclick="formatText()">一键格式化</button>
+<button onclick="copyToClipboard()">复制到剪切板</button>
+<span id="copySuccessText"></span>
+<button onclick="generateTxt()">下载生成TXT文本</button><br><br>
+  <textarea id="outputText" rows="20" cols="200"></textarea>
+
+  <script>
+    function formatText() {
+      var input = document.getElementById("inputText").value;
+      var lines = input.split("\n");
+      var formattedLines = [];
+
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        var commaIndex = line.indexOf(",");
+        if (commaIndex > 0) {
+          var programName = line.substring(0, commaIndex).trim();
+
+          // 进行数据纠正
+          if (programName === "CCTV1" || programName === "CCTV-1综合频道" ||programName === "CCTV1综合" || programName === "中央1套" || programName === "中央一套" || programName === "CCTV-1" || programName === "CCTV1-综合" || programName === "CCTV综合" || programName === "CCTV-综合") {
+            programName = "CCTV-1综合";
+          } else if (programName === "CCTV2" || programName === "CCTV-2财经频道" ||programName === "CCTV2财经" || programName === "中央2套" || programName === "中央二套" || programName === "CCTV-2" || programName === "CCTV2-财经" || programName === "CCTV财经"|| programName === "CCTV-财经") {
+            programName = "CCTV-2财经";
+          } else if (programName === "CCTV3" || programName === "CCTV-3综艺频道" || programName === "CCTV3综艺" ||programName === "中央3套" || programName === "中央三套" || programName === "CCTV-3" || programName === "CCTV3-综艺" || programName === "CCTV综艺"|| programName === "CCTV-综艺") {
+            programName = "CCTV-3综艺";
+         } else if (programName === "CCTV4" || programName === "CCTV-4中文国际" || programName === "CCTV4国际" || programName === "中央4套" || programName === "中央四套" || programName === "CCTV-4" || programName === "CCTV4-中文国际" || programName === "CCTV中文国际" || programName === "CCTV-中文国际" || programName === "CCTV国际"|| programName === "CCTV-国际" || programName === "CCTV4-国际" ) {
+            programName = "CCTV-4国际";
+         } else if (programName === "CCTV5" || programName === "CCTV-5体育频道" || programName === "CCTV5体育" || programName === "中央5套" || programName === "中央五套" || programName === "CCTV-5" || programName === "CCTV5-体育" || programName === "CCTV-体育"    || programName === "CCTV体育") {
+            programName = "CCTV-5体育";
+         } else if (programName === "CCTV5+" || programName === "CCTV-5+体育频道" || programName === "中央5+套" || programName === "中央五+套" || programName === "CCTV-5+" || programName === "CCTV5+-体育" || programName === "CCTV5+体育赛事" || programName === "CCTV5+体育赛事") {
+            programName = "CCTV-5+赛事";
+         } else if (programName === "CCTV6" || programName === "CCTV-6电影频道" || programName === "CCTV6电影" || programName === "中央6套" || programName === "中央六套" || programName === "CCTV-6" || programName === "CCTV6-电影" || programName === "CCTV电影"|| programName === "CCTV-电影") {
+            programName = "CCTV-6电影";
+         } else if (programName === "CCTV7" || programName === "CCTV-7军事频道"  || programName === "CCTV7军事"  || programName === "CCTV7国防"  || programName === "CCTV-7国防军事频道" || programName === "中央7套" || programName === "中央七套" || programName === "CCTV-7" || programName === "CCTV7-军事" || programName === "CCTV军事" || programName === "CCTV-军事"|| programName === "CCTV7-国防军事" || programName === "CCTV国防军事" || programName === "CCTV-国防军事"|| programName === "CCTV7-国防" || programName === "CCTV国防军事" || programName === "CCTV-国防军事" || programName === "CCTV7-军农") {
+            programName = "CCTV-7军事";
+         } else if (programName === "CCTV8" || programName === "CCTV-8电视剧频道" || programName === "CCTV8电视剧" || programName === "CCTV-6电视" || programName === "中央8套" || programName === "中央八套" || programName === "CCTV-8" || programName === "CCTV8-电视剧" || programName === "CCTV电视剧"  || programName === "CCTV-电视剧") {
+            programName = "CCTV-8电视";
+         } else if (programName === "CCTV9" || programName === "CCTV-9记录频道" || programName === "CCTV9记录" || programName === "中央9套" || programName === "中央九套" || programName === "CCTV-9" || programName === "CCTV9-记录" || programName === "CCTV记录" || programName === "CCTV-记录" || programName === "CCTV9-纪录" ) {
+            programName = "CCTV-9纪录";
+         } else if (programName === "CCTV10" || programName === "CCTV-10科教频道" || programName === "CCTV10科教" ||programName === "中央10套" || programName === "中央十套" || programName === "CCTV-10" || programName === "CCTV10-科教" || programName === "CCTV科教" || programName === "CCTV-科教") {
+            programName = "CCTV-10科教";
+         } else if (programName === "CCTV11" || programName === "CCTV-11戏曲频道" || programName === "CCTV11戏曲" || programName === "中央11套" || programName === "中央十一套" || programName === "CCTV-11" || programName === "CCTV11-科教" || programName === "CCTV戏曲" || programName === "CCTV-戏曲" || programName === "CCTV11-戏曲") {
+            programName = "CCTV-11戏曲";
+         } else if (programName === "CCTV12" || programName === "CCTV-12法治频道" || programName === "CCTV12法治" || programName === "中央12套" || programName === "中央十二套" || programName === "CCTV-12" || programName === "CCTV12-法治" || programName === "CCTV法治" || programName === "CCTV-法治" || programName === "CCTV12法制" || programName === "CCTV12-法制" || programName === "CCTV12-社会与法" || programName === "CCTV12社会与法" || programName === "CCTV法治" || programName === "CCTV-社会与法" || programName === "CCTV社会与法" ) {
+            programName = "CCTV-12社法";
+         } else if (programName === "CCTV13" || programName === "CCTV-13新闻频道" || programName === "CCTV13新闻" || programName === "中央13套" || programName === "中央十三套" || programName === "CCTV-13" || programName === "CCTV13-新闻" || programName === "CCTV新闻"|| programName === "CCTV-新闻") {
+            programName = "CCTV-13新闻";
+         } else if (programName === "CCTV14" || programName === "CCTV-14少儿频道" || programName === "CCTV14少儿" || programName === "中央14套" || programName === "中央十四套" || programName === "CCTV-14" || programName === "CCTV14-少儿" || programName === "CCTV少儿"|| programName === "CCTV-少儿") {
+            programName = "CCTV-14少儿";
+         } else if (programName === "CCTV15" || programName === "CCTV-15音乐频道" || programName === "CCTV15音乐" || programName === "中央15套" || programName === "中央十五套" || programName === "CCTV-15" || programName === "CCTV15-音乐" || programName === "CCTV音乐") {
+            programName = "CCTV-15音乐";
+         } else if (programName === "CCTV16" || programName === "CCTV-16奥林匹克" || programName === "CCTV16奥林匹克" || programName === "中央16套" || programName === "中央十六套" || programName === "CCTV-16" || programName === "CCTV16-奥林匹克" || programName === "CCTV奥林匹克") {
+            programName = "CCTV-16奥匹";
+         } else if (programName === "CCTV17" || programName === "CCTV-17农业农村频道" || programName === "CCTV17农业农村" || programName === "中央17套" || programName === "中央十七套" || programName === "CCTV-17" || programName === "CCTV17-农业农村"  || programName === "CCTV17-农业" || programName === "CCTV17农业" || programName === "CCTV农业农村") {
+            programName = "CCTV-17农村";
+         } else if (programName === "东方卫视" || programName === "上海台" || programName === "上海东方卫视" ) {
+            programName = "上海卫视";
+         } else if (programName === "福建东南卫视" || programName === "东南卫视") {
+            programName = "福建卫视";
+          }
+
+          line = programName + line.substring(commaIndex);
+        }
+        formattedLines.push(line);
+      }
+
+      var output = formattedLines.join("\n");
+      document.getElementById("outputText").value = output;
+    }
+function pasteText() {
+  navigator.clipboard.readText().then(function(text) {
+    document.getElementById("inputText").value = text;
+  });
+}
+function clearText() {
+  document.getElementById("inputText").value = "";
+  document.getElementById("outputText").value = "";
+}
+function copyToClipboard() {
+  var output = document.getElementById("outputText").value;
+  navigator.clipboard.writeText(output).then(function() {
+    var copySuccessText = document.getElementById("copySuccessText");
+    copySuccessText.textContent = "  成功！已成功复制到剪贴板 ~";
+    setTimeout(function() {
+      copySuccessText.textContent = "";
+    }, 2000);
+  });
+}
+
+function generateTxt() {
+  var text = document.getElementById("outputText").value;
+  var element = document.createElement("a");
+  element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+  element.setAttribute("download", "一键批量纠正名单.txt");
+
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+function showMessage() {
+            alert('名单： \n 1.CCTV 1-17全台 \n 2.东方卫视纠正为：上海卫视 \n 3.东南卫视纠正为：福建卫视 ');
+        }
+  </script>
+</body>
+</html>
