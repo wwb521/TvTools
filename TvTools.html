@@ -148,14 +148,14 @@
     <div class="menu" id="menu">
         <div class="menu-header">
             <img src="https://raw.githubusercontent.com/wwb521/live/main/ys.ico" alt="Logo">
-            <h1>直播源修改工具 v1.0</h1>
+            <h1>玩转直播源 v1.0</h1>
         </div>
         <div class="dropdown">
             <!-- 使用下拉框 -->
             <select onchange="handleDropdownChange(this)">
                 <option value="">功能选择</option>
                 <option value="correct">纠正直播源名称</option>
-                <option value="view">查看纠正列表</option>
+                <option value="view">查看更新列表</option>
             </select>
             <div class="dropdown-content" id="dropdown-correct">
                 <!-- 纠正直播源的选项 -->
@@ -167,7 +167,7 @@
             </div>
             <div class="dropdown-content" id="dropdown-view">
                 <!-- 纠正列表的选项 -->
-                <button onclick=" showMessage()">查看列表</button>
+                <button onclick=" showMessage()">更新说明</button>
             </div>
         </div>
     </div>
@@ -306,7 +306,7 @@
       document.getElementById("outputText").value = output;
     }
         function showMessage() {
-            alert('名单： \n 1.CCTV 1-17全台 \n 2.东方卫视纠正为：上海卫视 \n 3.东南卫视纠正为：福建卫视 ');
+            alert('开源免费，欢迎大家踊跃增加功能！！！');
         }
     </script>
 </body>
