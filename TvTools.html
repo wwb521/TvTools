@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>直播源工具</title>
+    <title>玩转TV</title>
     <link rel="icon" href="https://raw.githubusercontent.com/wwb521/live/main/ys.ico" type="image/x-icon">
     <style>
         /* 全局样式 */
@@ -119,6 +119,10 @@
             margin-left: 260px;
             /* 左侧菜单栏宽度 + padding */
             padding: 20px;
+            display: block;
+            /* 显示内容区域 */
+            max-width: calc(100% - 260px);
+            /* 最大宽度为屏幕宽度减去左侧菜单栏宽度 */
         }
 
         p {
@@ -141,22 +145,53 @@
             margin-right: 10px;
             cursor: pointer;
         }
+
+        .iframe-container {
+            width: calc(100% - 220px);
+            /* 右侧内容区域宽度 */
+            margin-left: 220px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: none;
+            /* 初始隐藏 */
+            height: calc(110.5vh - 80px);
+            /* 让 iframe 容器撑满剩余高度 */
+            overflow: hidden;
+            /* 溢出内容时显示滚动条 */
+            max-width: calc(100% - 210px);
+            /* 最大宽度为屏幕宽度减去左侧菜单栏宽度 */
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
+
 </head>
 
 <body>
     <div class="menu" id="menu">
         <div class="menu-header">
             <img src="https://raw.githubusercontent.com/wwb521/live/main/ys.ico" alt="Logo">
-            <h1>玩转直播源 v1.0</h1>
+            <h1>玩转TV v1.0</h1>
         </div>
         <div class="dropdown">
             <!-- 使用下拉框 -->
             <select onchange="handleDropdownChange(this)">
-                <option value="">功能选择</option>
+                <option value="table">菜单选择</option>
                 <option value="correct">纠正直播源名称</option>
-                <option value="view">查看更新列表</option>
+                <option value="epg">网站推荐</option>
+                <option value="view" disabled="true">查看更新列表</option>
             </select>
+            <script>
+                function handleDropdownChange(select) {
+
+                }
+            </script>
             <div class="dropdown-content" id="dropdown-correct">
                 <!-- 纠正直播源的选项 -->
                 <button onclick="pasteText()">粘贴</button>
@@ -166,13 +201,20 @@
                 <button onclick="generateTxt()">下载生成TXT文本</button>
             </div>
             <div class="dropdown-content" id="dropdown-view">
-                <!-- 纠正列表的选项 -->
-                <button onclick=" showMessage()">更新说明</button>
+                <!-- 更新列表的选项 -->
+                <button onclick="showMessage()">更新说明</button>
+            </div>
+            <div class="dropdown-content" id="dropdown-epg">
+                <!-- EPG节目单选项 -->
+                <button onclick="showHTML4()">直播源搜索</button>
+                <button onclick="showHTML()">EPG节目表</button>
+                <button onclick="showHTML2()">TV软件</button>
+                <button onclick="showHTML3()">tvbox接口</button>
             </div>
         </div>
     </div>
 
-    <div class="content">
+    <div class="content" id="content">
         <p>如：CCTV1-17、东方卫视纠正为：上海卫视、东南卫视纠正为：福建卫视、本工具为纯Html网页，无任何信息收集操作。</p>
         <textarea id="inputText" placeholder="在此输入需要纠正的直播源名称"></textarea>
         <br>
@@ -180,8 +222,33 @@
         <textarea id="outputText" placeholder="纠正后的直播源名称将在此显示"></textarea>
     </div>
 
+    <div class="iframe-container" id="iframe-container">
+        <!-- 右侧内容区域，初始为空 -->
+    </div>
+
+
     <script>
+
         function handleDropdownChange(select) {
+
+            var selectedValue = select.value;
+
+            // 遍历所有选项，隐藏 "菜单选择" 选项
+            var options = select.getElementsByTagName('option');
+            for (var i = 0; i < options.length; i++) {
+                var option = options[i];
+                if (option.value === 'table') {
+                    option.style.display = 'none';
+                } else {
+                    option.style.display = ''; // 显示其它选项
+                }
+            }
+
+            // 如果用户选择了 "菜单选择"，则重置下拉框显示
+            if (selectedValue === 'table') {
+                select.selectedIndex = -1; // 重置选中项为第一个有效选项
+            }
+
             var dropdowns = document.querySelectorAll('.dropdown-content');
             dropdowns.forEach(function (dropdown) {
                 dropdown.style.display = 'none';
@@ -195,14 +262,87 @@
                     dropdown.style.display = 'block';
                 }
             }
+
+            // 根据选择的选项，决定显示或隐藏内容区域
+            var content = document.getElementById('content');
+            var iframeContainer = document.getElementById('iframe-container');
+
+            if (selectedOption === 'epg') {
+                content.style.display = 'none'; // 隐藏纠正直播源名称的内容
+                iframeContainer.style.display = 'block'; // 显示右侧内容区域
+            } else if (selectedOption === 'view') {
+                content.style.display = 'none'; // 隐藏纠正直播源名称的内容
+                iframeContainer.style.display = 'none'; // 隐藏右侧内容区域
+            } else if (selectedOption === "table") {
+                content.style.display = 'none'; // 隐藏纠正直播源名称的内容
+                iframeContainer.style.display = 'none'; // 隐藏右侧内容区域
+            }
+            else {
+                content.style.display = 'block'; // 显示纠正直播源名称的内容
+                iframeContainer.style.display = 'none'; // 隐藏右侧内容区域
+            }
         }
+
 
         function formatText() {
             var input = document.getElementById("inputText").value;
             var lines = input.split("\n");
-            var formattedLines = lines.map(function (line) {
-                return line.replace(/CCTV1/g, "CCTV-1");
-            });
+            var formattedLines = [];
+
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i].trim();
+                var commaIndex = line.indexOf(",");
+                if (commaIndex > 0) {
+                    var programName = line.substring(0, commaIndex).trim();
+
+                    // 进行数据纠正
+                    if (programName === "CCTV1" || programName === "CCTV-1综合频道" || programName === "CCTV1综合" || programName === "中央1套" || programName === "中央一套" || programName === "CCTV-1" || programName === "CCTV1-综合" || programName === "CCTV综合" || programName === "CCTV-综合") {
+                        programName = "CCTV-1综合";
+                    } else if (programName === "CCTV2" || programName === "CCTV-2财经频道" || programName === "CCTV2财经" || programName === "中央2套" || programName === "中央二套" || programName === "CCTV-2" || programName === "CCTV2-财经" || programName === "CCTV财经" || programName === "CCTV-财经") {
+                        programName = "CCTV-2财经";
+                    } else if (programName === "CCTV3" || programName === "CCTV-3综艺频道" || programName === "CCTV3综艺" || programName === "中央3套" || programName === "中央三套" || programName === "CCTV-3" || programName === "CCTV3-综艺" || programName === "CCTV综艺" || programName === "CCTV-综艺") {
+                        programName = "CCTV-3综艺";
+                    } else if (programName === "CCTV4" || programName === "CCTV-4中文国际" || programName === "CCTV4国际" || programName === "中央4套" || programName === "中央四套" || programName === "CCTV-4" || programName === "CCTV4-中文国际" || programName === "CCTV中文国际" || programName === "CCTV-中文国际" || programName === "CCTV国际" || programName === "CCTV-国际" || programName === "CCTV4-国际") {
+                        programName = "CCTV-4国际";
+                    } else if (programName === "CCTV5" || programName === "CCTV-5体育频道" || programName === "CCTV5体育" || programName === "中央5套" || programName === "中央五套" || programName === "CCTV-5" || programName === "CCTV5-体育" || programName === "CCTV-体育" || programName === "CCTV体育") {
+                        programName = "CCTV-5体育";
+                    } else if (programName === "CCTV5+" || programName === "CCTV-5+体育频道" || programName === "中央5+套" || programName === "中央五+套" || programName === "CCTV-5+" || programName === "CCTV5+-体育" || programName === "CCTV5+体育赛事" || programName === "CCTV5+体育赛事") {
+                        programName = "CCTV-5+赛事";
+                    } else if (programName === "CCTV6" || programName === "CCTV-6电影频道" || programName === "CCTV6电影" || programName === "中央6套" || programName === "中央六套" || programName === "CCTV-6" || programName === "CCTV6-电影" || programName === "CCTV电影" || programName === "CCTV-电影") {
+                        programName = "CCTV-6电影";
+                    } else if (programName === "CCTV7" || programName === "CCTV-7军事频道" || programName === "CCTV7军事" || programName === "CCTV7国防" || programName === "CCTV-7国防军事频道" || programName === "中央7套" || programName === "中央七套" || programName === "CCTV-7" || programName === "CCTV7-军事" || programName === "CCTV军事" || programName === "CCTV-军事" || programName === "CCTV7-国防军事" || programName === "CCTV国防军事" || programName === "CCTV-国防军事" || programName === "CCTV7-国防" || programName === "CCTV国防军事" || programName === "CCTV-国防军事" || programName === "CCTV7-军农") {
+                        programName = "CCTV-7军事";
+                    } else if (programName === "CCTV8" || programName === "CCTV-8电视剧频道" || programName === "CCTV8电视剧" || programName === "CCTV-6电视" || programName === "中央8套" || programName === "中央八套" || programName === "CCTV-8" || programName === "CCTV8-电视剧" || programName === "CCTV电视剧" || programName === "CCTV-电视剧") {
+                        programName = "CCTV-8电视";
+                    } else if (programName === "CCTV9" || programName === "CCTV-9记录频道" || programName === "CCTV9记录" || programName === "中央9套" || programName === "中央九套" || programName === "CCTV-9" || programName === "CCTV9-记录" || programName === "CCTV记录" || programName === "CCTV-记录" || programName === "CCTV9-纪录") {
+                        programName = "CCTV-9纪录";
+                    } else if (programName === "CCTV10" || programName === "CCTV-10科教频道" || programName === "CCTV10科教" || programName === "中央10套" || programName === "中央十套" || programName === "CCTV-10" || programName === "CCTV10-科教" || programName === "CCTV科教" || programName === "CCTV-科教") {
+                        programName = "CCTV-10科教";
+                    } else if (programName === "CCTV11" || programName === "CCTV-11戏曲频道" || programName === "CCTV11戏曲" || programName === "中央11套" || programName === "中央十一套" || programName === "CCTV-11" || programName === "CCTV11-科教" || programName === "CCTV戏曲" || programName === "CCTV-戏曲" || programName === "CCTV11-戏曲") {
+                        programName = "CCTV-11戏曲";
+                    } else if (programName === "CCTV12" || programName === "CCTV-12法治频道" || programName === "CCTV12法治" || programName === "中央12套" || programName === "中央十二套" || programName === "CCTV-12" || programName === "CCTV12-法治" || programName === "CCTV法治" || programName === "CCTV-法治" || programName === "CCTV12法制" || programName === "CCTV12-法制" || programName === "CCTV12-社会与法" || programName === "CCTV12社会与法" || programName === "CCTV法治" || programName === "CCTV-社会与法" || programName === "CCTV社会与法") {
+                        programName = "CCTV-12社法";
+                    } else if (programName === "CCTV13" || programName === "CCTV-13新闻频道" || programName === "CCTV13新闻" || programName === "中央13套" || programName === "中央十三套" || programName === "CCTV-13" || programName === "CCTV13-新闻" || programName === "CCTV新闻" || programName === "CCTV-新闻") {
+                        programName = "CCTV-13新闻";
+                    } else if (programName === "CCTV14" || programName === "CCTV-14少儿频道" || programName === "CCTV14少儿" || programName === "中央14套" || programName === "中央十四套" || programName === "CCTV-14" || programName === "CCTV14-少儿" || programName === "CCTV少儿" || programName === "CCTV-少儿") {
+                        programName = "CCTV-14少儿";
+                    } else if (programName === "CCTV15" || programName === "CCTV-15音乐频道" || programName === "CCTV15音乐" || programName === "中央15套" || programName === "中央十五套" || programName === "CCTV-15" || programName === "CCTV15-音乐" || programName === "CCTV音乐") {
+                        programName = "CCTV-15音乐";
+                    } else if (programName === "CCTV16" || programName === "CCTV-16奥林匹克" || programName === "CCTV16奥林匹克" || programName === "中央16套" || programName === "中央十六套" || programName === "CCTV-16" || programName === "CCTV16-奥林匹克" || programName === "CCTV奥林匹克") {
+                        programName = "CCTV-16奥匹";
+                    } else if (programName === "CCTV17" || programName === "CCTV-17农业农村频道" || programName === "CCTV17农业农村" || programName === "中央17套" || programName === "中央十七套" || programName === "CCTV-17" || programName === "CCTV17-农业农村" || programName === "CCTV17-农业" || programName === "CCTV17农业" || programName === "CCTV农业农村") {
+                        programName = "CCTV-17农村";
+                    } else if (programName === "东方卫视" || programName === "上海台" || programName === "上海东方卫视") {
+                        programName = "上海卫视";
+                    } else if (programName === "福建东南卫视" || programName === "东南卫视") {
+                        programName = "福建卫视";
+                    }
+
+                    line = programName + line.substring(commaIndex);
+                }
+                formattedLines.push(line);
+            }
+
             var output = formattedLines.join("\n");
             document.getElementById("outputText").value = output;
         }
@@ -221,18 +361,12 @@
         }
 
         function copyToClipboard() {
-            var output = document.getElementById("outputText").value;
-            navigator.clipboard.writeText(output).then(function () {
-                var copySuccessText = document.getElementById("copySuccessText");
-                copySuccessText.textContent = "已成功复制到剪切板！";
-                setTimeout(function () {
-                    copySuccessText.textContent = "";
-                }, 2000);
-            }).catch(function (error) {
-                console.error('Failed to write to clipboard: ', error);
-            });
+            var copyText = document.getElementById("outputText");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            document.getElementById("copySuccessText").innerText = "已复制到剪切板";
         }
-
         function generateTxt() {
             var text = document.getElementById("outputText").value;
             var element = document.createElement("a");
@@ -243,70 +377,73 @@
             element.click();
             document.body.removeChild(element);
         }
-        function formatText() {
-      var input = document.getElementById("inputText").value;
-      var lines = input.split("\n");
-      var formattedLines = [];
-
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i].trim();
-        var commaIndex = line.indexOf(",");
-        if (commaIndex > 0) {
-          var programName = line.substring(0, commaIndex).trim();
-
-          // 进行数据纠正
-          if (programName === "CCTV1" || programName === "CCTV-1综合频道" ||programName === "CCTV1综合" || programName === "中央1套" || programName === "中央一套" || programName === "CCTV-1" || programName === "CCTV1-综合" || programName === "CCTV综合" || programName === "CCTV-综合") {
-            programName = "CCTV-1综合";
-          } else if (programName === "CCTV2" || programName === "CCTV-2财经频道" ||programName === "CCTV2财经" || programName === "中央2套" || programName === "中央二套" || programName === "CCTV-2" || programName === "CCTV2-财经" || programName === "CCTV财经"|| programName === "CCTV-财经") {
-            programName = "CCTV-2财经";
-          } else if (programName === "CCTV3" || programName === "CCTV-3综艺频道" || programName === "CCTV3综艺" ||programName === "中央3套" || programName === "中央三套" || programName === "CCTV-3" || programName === "CCTV3-综艺" || programName === "CCTV综艺"|| programName === "CCTV-综艺") {
-            programName = "CCTV-3综艺";
-         } else if (programName === "CCTV4" || programName === "CCTV-4中文国际" || programName === "CCTV4国际" || programName === "中央4套" || programName === "中央四套" || programName === "CCTV-4" || programName === "CCTV4-中文国际" || programName === "CCTV中文国际" || programName === "CCTV-中文国际" || programName === "CCTV国际"|| programName === "CCTV-国际" || programName === "CCTV4-国际" ) {
-            programName = "CCTV-4国际";
-         } else if (programName === "CCTV5" || programName === "CCTV-5体育频道" || programName === "CCTV5体育" || programName === "中央5套" || programName === "中央五套" || programName === "CCTV-5" || programName === "CCTV5-体育" || programName === "CCTV-体育"    || programName === "CCTV体育") {
-            programName = "CCTV-5体育";
-         } else if (programName === "CCTV5+" || programName === "CCTV-5+体育频道" || programName === "中央5+套" || programName === "中央五+套" || programName === "CCTV-5+" || programName === "CCTV5+-体育" || programName === "CCTV5+体育赛事" || programName === "CCTV5+体育赛事") {
-            programName = "CCTV-5+赛事";
-         } else if (programName === "CCTV6" || programName === "CCTV-6电影频道" || programName === "CCTV6电影" || programName === "中央6套" || programName === "中央六套" || programName === "CCTV-6" || programName === "CCTV6-电影" || programName === "CCTV电影"|| programName === "CCTV-电影") {
-            programName = "CCTV-6电影";
-         } else if (programName === "CCTV7" || programName === "CCTV-7军事频道"  || programName === "CCTV7军事"  || programName === "CCTV7国防"  || programName === "CCTV-7国防军事频道" || programName === "中央7套" || programName === "中央七套" || programName === "CCTV-7" || programName === "CCTV7-军事" || programName === "CCTV军事" || programName === "CCTV-军事"|| programName === "CCTV7-国防军事" || programName === "CCTV国防军事" || programName === "CCTV-国防军事"|| programName === "CCTV7-国防" || programName === "CCTV国防军事" || programName === "CCTV-国防军事" || programName === "CCTV7-军农") {
-            programName = "CCTV-7军事";
-         } else if (programName === "CCTV8" || programName === "CCTV-8电视剧频道" || programName === "CCTV8电视剧" || programName === "CCTV-6电视" || programName === "中央8套" || programName === "中央八套" || programName === "CCTV-8" || programName === "CCTV8-电视剧" || programName === "CCTV电视剧"  || programName === "CCTV-电视剧") {
-            programName = "CCTV-8电视";
-         } else if (programName === "CCTV9" || programName === "CCTV-9记录频道" || programName === "CCTV9记录" || programName === "中央9套" || programName === "中央九套" || programName === "CCTV-9" || programName === "CCTV9-记录" || programName === "CCTV记录" || programName === "CCTV-记录" || programName === "CCTV9-纪录" ) {
-            programName = "CCTV-9纪录";
-         } else if (programName === "CCTV10" || programName === "CCTV-10科教频道" || programName === "CCTV10科教" ||programName === "中央10套" || programName === "中央十套" || programName === "CCTV-10" || programName === "CCTV10-科教" || programName === "CCTV科教" || programName === "CCTV-科教") {
-            programName = "CCTV-10科教";
-         } else if (programName === "CCTV11" || programName === "CCTV-11戏曲频道" || programName === "CCTV11戏曲" || programName === "中央11套" || programName === "中央十一套" || programName === "CCTV-11" || programName === "CCTV11-科教" || programName === "CCTV戏曲" || programName === "CCTV-戏曲" || programName === "CCTV11-戏曲") {
-            programName = "CCTV-11戏曲";
-         } else if (programName === "CCTV12" || programName === "CCTV-12法治频道" || programName === "CCTV12法治" || programName === "中央12套" || programName === "中央十二套" || programName === "CCTV-12" || programName === "CCTV12-法治" || programName === "CCTV法治" || programName === "CCTV-法治" || programName === "CCTV12法制" || programName === "CCTV12-法制" || programName === "CCTV12-社会与法" || programName === "CCTV12社会与法" || programName === "CCTV法治" || programName === "CCTV-社会与法" || programName === "CCTV社会与法" ) {
-            programName = "CCTV-12社法";
-         } else if (programName === "CCTV13" || programName === "CCTV-13新闻频道" || programName === "CCTV13新闻" || programName === "中央13套" || programName === "中央十三套" || programName === "CCTV-13" || programName === "CCTV13-新闻" || programName === "CCTV新闻"|| programName === "CCTV-新闻") {
-            programName = "CCTV-13新闻";
-         } else if (programName === "CCTV14" || programName === "CCTV-14少儿频道" || programName === "CCTV14少儿" || programName === "中央14套" || programName === "中央十四套" || programName === "CCTV-14" || programName === "CCTV14-少儿" || programName === "CCTV少儿"|| programName === "CCTV-少儿") {
-            programName = "CCTV-14少儿";
-         } else if (programName === "CCTV15" || programName === "CCTV-15音乐频道" || programName === "CCTV15音乐" || programName === "中央15套" || programName === "中央十五套" || programName === "CCTV-15" || programName === "CCTV15-音乐" || programName === "CCTV音乐") {
-            programName = "CCTV-15音乐";
-         } else if (programName === "CCTV16" || programName === "CCTV-16奥林匹克" || programName === "CCTV16奥林匹克" || programName === "中央16套" || programName === "中央十六套" || programName === "CCTV-16" || programName === "CCTV16-奥林匹克" || programName === "CCTV奥林匹克") {
-            programName = "CCTV-16奥匹";
-         } else if (programName === "CCTV17" || programName === "CCTV-17农业农村频道" || programName === "CCTV17农业农村" || programName === "中央17套" || programName === "中央十七套" || programName === "CCTV-17" || programName === "CCTV17-农业农村"  || programName === "CCTV17-农业" || programName === "CCTV17农业" || programName === "CCTV农业农村") {
-            programName = "CCTV-17农村";
-         } else if (programName === "东方卫视" || programName === "上海台" || programName === "上海东方卫视" ) {
-            programName = "上海卫视";
-         } else if (programName === "福建东南卫视" || programName === "东南卫视") {
-            programName = "福建卫视";
-          }
-
-          line = programName + line.substring(commaIndex);
-        }
-        formattedLines.push(line);
-      }
-
-      var output = formattedLines.join("\n");
-      document.getElementById("outputText").value = output;
-    }
         function showMessage() {
             alert('开源免费，欢迎大家踊跃增加功能！！！');
+        }
+
+        function showHTML() {
+            var iframeContainer = document.getElementById('iframe-container');
+            iframeContainer.style.display = 'block'; // 显示右侧内容区域
+
+            // 清空旧的 iframe
+            iframeContainer.innerHTML = '';
+
+            // 创建新的 iframe 元素
+            var iframe = document.createElement('iframe');
+            iframe.src = 'https://epg.112114.eu.org/'; // 替换为实际的EPG节目单URL
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.frameBorder = '0'; // 设置边框为0，避免显示边框
+            iframe.allowFullscreen = true; // 允许全屏模式
+            iframeContainer.appendChild(iframe);
+        }
+        function showHTML2() {
+            var iframeContainer = document.getElementById('iframe-container');
+            iframeContainer.style.display = 'block'; // 显示右侧内容区域
+
+            // 清空旧的 iframe
+            iframeContainer.innerHTML = '';
+
+            // 创建新的 iframe 元素
+            var iframe = document.createElement('iframe');
+            iframe.src = 'https://www.fenxm.com/tv'; // 替换为实际的URL
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.frameBorder = '0'; // 设置边框为0，避免显示边框
+            iframe.allowFullscreen = true; // 允许全屏模式
+            iframeContainer.appendChild(iframe);
+        }
+        function showHTML3() {
+            var iframeContainer = document.getElementById('iframe-container');
+            iframeContainer.style.display = 'block'; // 显示右侧内容区域
+
+            // 清空旧的 iframe
+            iframeContainer.innerHTML = '';
+
+            // 创建新的 iframe 元素
+            var iframe = document.createElement('iframe');
+            iframe.src = 'https://lige.chat/tvbox'; // 替换为实际的URL
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.frameBorder = '0'; // 设置边框为0，避免显示边框
+            iframe.allowFullscreen = true; // 允许全屏模式
+            iframeContainer.appendChild(iframe);
+        }
+        function showHTML4() {
+            var iframeContainer = document.getElementById('iframe-container');
+            iframeContainer.style.display = 'block'; // 显示右侧内容区域
+
+            // 清空旧的 iframe
+            iframeContainer.innerHTML = '';
+
+            // 创建新的 iframe 元素
+            var iframe = document.createElement('iframe');
+            iframe.src = 'http://www.foodieguide.com/iptvsearch/'; // 替换为实际的URL
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.frameBorder = '0'; // 设置边框为0，避免显示边框
+            iframe.allowFullscreen = true; // 允许全屏模式
+            iframeContainer.appendChild(iframe);
         }
     </script>
 </body>
