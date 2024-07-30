@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/ys.ico" type="image/x-icon">
+    <title>电视影视源分享项目</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 2px solid #ddd;
+            background-color: #fff;
+        }
+
+        header img {
+            vertical-align: middle;
+        }
+
+        header h1 {
+            margin: 10px 0;
+            font-size: 1.8em;
+        }
+
+        header h3 {
+            margin: 5px 0 0;
+            font-weight: normal;
+            color: #555;
+            font-size: 1.2em;
+        }
+
+        section {
+            margin: 20px;
+        }
+
+        section h2 {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .note {
+            background-color: #fff;
+            border-left: 5px solid #2196F3;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+
+        .link-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .link-list li {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .link-list a {
+            color: #2196F3;
+            text-decoration: none;
+            flex: 1;
+        }
+
+        .link-list a:hover {
+            text-decoration: underline;
+        }
+
+        .copy-btn {
+            background: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: #0b79d0;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #ddd;
+            background: #fff;
+        }
+
+        footer img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+
+        .footer-images {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-images img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Media Queries */
+        @media (max-width: 1024px) {
+            header h1 {
+                font-size: 1.6em;
+            }
+
+            header h3 {
+                font-size: 1em;
+            }
+
+            section h2 {
+                font-size: 1.2em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            .copy-btn {
+                font-size: 0.8em;
+                padding: 4px 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.4em;
+            }
+
+            header h3 {
+                font-size: 0.9em;
+            }
+
+            section h2 {
+                font-size: 1em;
+            }
+
+            table {
+                font-size: 0.8em;
+            }
+
+            .copy-btn {
+                font-size: 0.7em;
+                padding: 3px 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.2em;
+            }
+
+            header h3 {
+                font-size: 0.8em;
+            }
+
+            section h2 {
+                font-size: 0.9em;
+            }
+
+            table {
+                font-size: 0.7em;
+            }
+
+            .copy-btn {
+                font-size: 0.6em;
+                padding: 2px 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="https://github.moeyy.xyz/https://github.com/wwb521/live/blob/main/ys.ico" alt="项目图标" width="50">
+        <h1>一个分享电视、影视源的项目</h1>
+        <h3>永久免费 完整开源</h3>
+    </header>
+
+    <section>
+        <h2>公告栏</h2>
+        <p>2024.7.2: 直播源已经更新，顺便清理影视接口失效源，均可正常观看！</p>
+    </section>
+
+    <section>
+        <h2>IPV6直播源</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>类别</th>
+                    <th>txt格式</th>
+                    <th>m3u格式</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>IPTV</td>
+                    <td>
+                        <a href="https://raw.githubusercontent.com/wwb521/live/main/tv.txt" target="_blank">https://raw.githubusercontent.com/wwb521/live/main/tv.txt</a>
+                        <button class="copy-btn" data-clipboard-text="https://raw.githubusercontent.com/wwb521/live/main/tv.txt">复制</button><br>
+                        <a href="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/tv.txt" target="_blank">https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/tv.txt</a>
+                        <button class="copy-btn" data-clipboard-text="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/tv.txt">复制</button>
+                    </td>
+                    <td>
+                        <a href="https://raw.githubusercontent.com/wwb521/live/main/tv.m3u" target="_blank">https://raw.githubusercontent.com/wwb521/live/main/tv.m3u</a>
+                        <button class="copy-btn" data-clipboard-text="https://raw.githubusercontent.com/wwb521/live/main/tv.m3u">复制</button><br>
+                        <a href="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/tv.m3u" target="_blank">https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/tv.m3u</a>
+                        <button class="copy-btn" data-clipboard-text="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/tv.m3u">复制</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>注意</h2>
+        <div class="note">
+            针对于央视卫视直播源，路由器需要开启 IPV6 模式，把直播源地址填入空壳直播软件。如果遇到卡顿（也可能与硬件性能和网络运营商有关系），遥控器右键换线路即可，我会及时清理卡顿的直播源。
+        </div>
+    </section>
+
+    <section>
+        <h2>TvBox</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>类别</th>
+                    <th>正常</th>
+                    <th>18+ (小心当场尴尬)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>tvbox</td>
+                    <td>
+                        <a href="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/movies.json" target="_blank">https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/movies.json</a>
+                        <button class="copy-btn" data-clipboard-text="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/movies.json">复制</button>
+                    </td>
+                    <td>
+                        <a href="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/video.json" target="_blank">https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/video.json</a>
+                        <button class="copy-btn" data-clipboard-text="https://github.moeyy.xyz/https://raw.githubusercontent.com/wwb521/live/main/video.json">复制</button><br>
+                        （18+链接，提示一下避免社死）
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>其他资源</h2>
+        <p>如果直播源很麻烦，就用下面的这些：</p>
+        <ul class="link-list">
+            <li>
+                <a href="https://wwt.lanzouj.com/b00xxqs6h" target="_blank">https://wwt.lanzouj.com/b00xxqs6h 密码: 7r7h</a>
+                <button class="copy-btn" data-clipboard-text="https://wwt.lanzouj.com/b00xxqs6h">复制</button>
+            </li>
+            <li>
+                <a href="https://lyrics.run/my-tv.html" target="_blank">https://lyrics.run/my-tv.html</a>
+                <button class="copy-btn" data-clipboard-text="https://lyrics.run/my-tv.html">复制</button>
+            </li>
+            <li>
+                <a href="https://github.com/HTWMedia/HTV" target="_blank">https://github.com/HTWMedia/HTV</a>
+                <button class="copy-btn" data-clipboard-text="https://github.com/HTWMedia/HTV">复制</button>
+            </li>
+            <li>
+                <a href="https://github.com/yaoxieyoulei/mytv-android" target="_blank">https://github.com/yaoxieyoulei/mytv-android</a>
+                <button class="copy-btn" data-clipboard-text="https://github.com/yaoxieyoulei/mytv-android">复制</button>
+            </li>
+            <li>
+                <a href="https://github.com/yaoxieyoulei/my_tv" target="_blank">https://github.com/yaoxieyoulei/my_tv</a>
+                <button class="copy-btn" data-clipboard-text="https://github.com/yaoxieyoulei/my_tv">复制</button>
+            </li>
+            <li>
+                <a href="https://github.com/Potato-66/SimpleTV" target="_blank">https://github.com/Potato-66/SimpleTV</a>
+                <button class="copy-btn" data-clipboard-text="https://github.com/Potato-66/SimpleTV">复制</button>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>推荐网站</h2>
+        <p>觉得上面tvbox接口不咋的，就去这些网站看：</p>
+        <ul class="link-list">
+            <li>
+                <a href="https://cyuan.netlify.app/" target="_blank">https://cyuan.netlify.app/</a>
+                <button class="copy-btn" data-clipboard-text="https://cyuan.netlify.app/">复制</button>
+            </li>
+            <li>
+                <a href="http://xn--sss604efuw.top/" target="_blank">http://xn--sss604efuw.top/</a>
+                <button class="copy-btn" data-clipboard-text="http://xn--sss604efuw.top/">复制</button>
+            </li>
+            <li>
+                <a href="https://www.lige.chat" target="_blank">https://www.lige.chat</a>
+                <button class="copy-btn" data-clipboard-text="https://www.lige.chat">复制</button>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>软件</h2>
+        <h3>tvbox软件</h3>
+        <a href="https://github.com/FongMi/Release" target="_blank">https://github.com/FongMi/Release</a>
+        <button class="copy-btn" data-clipboard-text="https://github.com/FongMi/Release">复制</button>
+
+        <h3>空壳直播软件</h3>
+        <a href="https://wwt.lanzouj.com/b00y2bymj" target="_blank">https://wwt.lanzouj.com/b00y2bymj 密码: 7kkf</a>
+        <button class="copy-btn" data-clipboard-text="https://wwt.lanzouj.com/b00y2bymj">复制</button>
+    </section>
+
+    <footer>
+        <h2>联系&打赏</h2>
+        <div class="footer-images">
+            <img src="https://github.moeyy.xyz/https://github.com/wwb521/live/blob/main/lx.png" alt="扫码联系">
+            <img src="https://github.moeyy.xyz/https://github.com/wwb521/live/blob/main/pay.jpeg" alt="打赏支持" width="450">
+        </div>
+
+        <h2>Start趋势</h2>
+        <div class="footer-images">
+            <img src="https://api.star-history.com/svg?repos=wwb521/live&type=Date" alt="Star History" width="520">
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const text = button.getAttribute('data-clipboard-text');
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('链接已复制到剪贴板!');
+                }).catch(err => {
+                    alert('复制失败，请手动复制链接。');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
